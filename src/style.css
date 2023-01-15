@@ -50,7 +50,7 @@ li::first-letter {
   width: 64px;
 }
 
-.weather-temperature #temperature {
+.weather-temperature strong {
   color: #5a5a5a;
   font-size: 60px;
   line-height: 1;
@@ -61,6 +61,11 @@ li::first-letter {
   position: relative;
   font-size: 16px;
   top: -28px;
+}
+
+.weather-temperature .active {
+  color: #5a5a5a;
+  cursor: default;
 }
 
 a:link {
