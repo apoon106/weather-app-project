@@ -21,34 +21,59 @@ function formatDate(timestamp) {
   return `${day} ${hours}:${minutes}`;
 }
 
-function displayForecast() {
+function formatDay(timestamp) {
+  let date = new Date(timestamp * 1000);
+  let day = date.getDay();
+  let days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+  return days[day];
+}
+
+function displayForecast(response) {
+  let forecast = response.data.daily;
+
   let forecastElement = document.querySelector("#forecast");
 
-  let days = ["Thur", "Fri", "Sat", "Sun"];
   let forecastHTML = `<div class="row">`;
 
-  days.forEach(function (day) {
-    forecastHTML =
-      forecastHTML +
-      `
+  forecast.forEach(function (forecastDay, index) {
+    if (index < 6) {
+      forecastHTML =
+        forecastHTML +
+        `
     <div class="col-md-2">
-      <div class="weather-forecast-date">${day}</div>
+      <div class="weather-forecast-date">${formatDay(forecastDay.time)}</div>
          <img
-            src="https://ssl.gstatic.com/onebox/weather/64/cloudy.png"
+            src="http://shecodes-assets.s3.amazonaws.com/api/weather/icons/${
+              forecastDay.condition.icon
+            }.png"
             alt=""
             width="36"          
           />
            <div class="weather-forecast-temperatures">     
-            <span class="weather-forecast-temperature-max"> 18°C </span>
-            <span class="weather-forecast-temperature-min"> 12°C       
+            <span class="weather-forecast-temperature-max"> ${Math.round(
+              forecastDay.temperature.maximum
+            )}°C </span>
+            <span class="weather-forecast-temperature-min"> ${Math.round(
+              forecastDay.temperature.minimum
+            )}°C       
              </span>  
             </div>    
     </div>         
     `;
+    }
   });
 
   forecastHTML = forecastHTML + `</div>`;
   forecastElement.innerHTML = forecastHTML;
+}
+
+function getForecast(coordinates) {
+  console.log(coordinates);
+  let apiKey = "56c5825ct0o4b59ab43d3ba391f24bff";
+  let apiUrl = `https://api.shecodes.io/weather/v1/forecast?lon=${coordinates.longitude}&lat=${coordinates.latitude}&key=${apiKey}&unit=metric`;
+  console.log(apiUrl);
+  axios.get(apiUrl).then(displayForecast);
 }
 
 function displayTemperature(response) {
@@ -73,6 +98,8 @@ function displayTemperature(response) {
     `http://shecodes-assets.s3.amazonaws.com/api/weather/icons/${response.data.condition.icon}.png`
   );
   iconElement.setAttribute("alt", `response.data.condition.description`);
+
+  getForecast(response.data.coordinates);
 }
 
 function search(query) {
@@ -116,4 +143,3 @@ let celsiusLink = document.querySelector("#celsius-link");
 celsiusLink.addEventListener("click", displayCelsiusTemperature);
 
 search("New York");
-displayForecast();
