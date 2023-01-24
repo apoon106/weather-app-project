@@ -44,7 +44,7 @@ function displayForecast(response) {
     <div class="col-md-2">
       <div class="weather-forecast-date">${formatDay(forecastDay.time)}</div>
          <img
-            src="http://shecodes-assets.s3.amazonaws.com/api/weather/icons/${
+            src="https://shecodes-assets.s3.amazonaws.com/api/weather/icons/${
               forecastDay.condition.icon
             }.png"
             alt=""
@@ -83,8 +83,6 @@ function displayTemperature(response) {
   let dateElement = document.querySelector("#date");
   let iconElement = document.querySelector("#icon");
 
-  fahrenheitTemperature = response.data.temperature.current;
-
   cityElement.innerHTML = response.data.city;
   temperatureElement.innerHTML = Math.round(response.data.temperature.current);
   descriptionElement.innerHTML = response.data.condition.description;
@@ -93,7 +91,7 @@ function displayTemperature(response) {
   dateElement.innerHTML = formatDate(response.data.time * 1000);
   iconElement.setAttribute(
     "src",
-    `http://shecodes-assets.s3.amazonaws.com/api/weather/icons/${response.data.condition.icon}.png`
+    `https://shecodes-assets.s3.amazonaws.com/api/weather/icons/${response.data.condition.icon}.png`
   );
   iconElement.setAttribute("alt", `response.data.condition.description`);
 
